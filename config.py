@@ -10,7 +10,11 @@ load_dotenv()
 WECHAT_TOKEN = os.getenv("WECHAT_TOKEN", "your_token_here")
 
 # ── 数据库 ──
-DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///bookkeeper.db")
+# Render 上根目录可能只读，用 /tmp 存 SQLite
+import tempfile
+import pathlib
+_db_default = f"sqlite:///{pathlib.Path(tempfile.gettempdir()) / 'bookkeeper.db'}"
+DATABASE_URL = os.getenv("DATABASE_URL", _db_default)
 
 # ── Claude API (可选 fallback) ──
 ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY", "")
